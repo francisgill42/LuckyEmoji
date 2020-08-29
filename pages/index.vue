@@ -1,9 +1,22 @@
 <template>
 
 <v-row>
+<v-dialog v-model="dialog1">
+  <v-row>
+    <v-col cols="12">
 
+      <v-card class="pa-3">
+       <p @click="dialog1 = false" class="text-right mt-3"><v-icon small style="border-radius:50%;" class="pa-1 white--text purple">mdi-close</v-icon></p>
+       <p style="margin-top:-40px;">{{msg}} </p>   
+        
+      </v-card>
+     
+
+    </v-col>
+  </v-row>
+</v-dialog>
 <v-col>
-    <v-card v-if="msg" outlined color="red" class="secondary pa-2 text-center">
+    <v-card v-if="win" outlined color="red" class="secondary pa-2 text-center">
     {{msg}} 
     </v-card>     
 </v-col>
@@ -39,10 +52,12 @@ export default {
 
   data : () => ({
     disabled : false,
+    dialog1:false,
     num : 0,
     counter : 0,
     coins:5,
     msg : '',
+    win:false,
     options : [
       {text:'😀',color:'white'},
       {text:'😁',color:'white'},
@@ -68,12 +83,14 @@ export default {
 
 
        if(this.num == 0){
-        alert('select your number before start the game');
+         this.msg = `select your number before start the game`;
+         this.dialog1 = true;
          return false;
         }
 
         if(this.coins == 0){
-        alert('you dont have enough coins');
+        this.msg = `you dont have enough coins`;
+        this.dialog1 = true;
         return false;
         }
 
@@ -115,14 +132,15 @@ export default {
 
         if(this.num == this.options[this.counter - 1].text){
           this.coins+=5;
-          alert('you won');
-          alert('you earned 5 more coins. now your total coins are ' + this.coins);
+          this.msg = `You Won! Now your total coins are ${this.coins}`
           this.num = 0;
+          this.win = true
         }
         else{
          this.coins--;
-          alert('you remaining coins: ' + this.coins);
+         this.msg = `you remaining coins: ${this.coins}`
         }
+        this.dialog1 = true;
     },
     reset () {
 
@@ -133,7 +151,8 @@ export default {
     },
     my_num(v){
       this.num = v
-      alert('your emoji : ' + this.num)
+      this.msg = `Your Emoji ${this.num}`
+      this.dialog1 = true;
     }
   }
 }
